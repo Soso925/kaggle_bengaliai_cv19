@@ -104,16 +104,12 @@ def model_toto3(summary = False, plot_summary = False) :
 
 def model_save(model, filename, weight = False):
     #history is always true
-
+    with open(filename, 'wb') as file_pi:
+        pickle.dump(model.history, file_pi)
+    print('saved the history for you in pickle format')
+    
     if weight == True :
         model.save( filename + ".h5")
         print('saved the model for you in .h5 format' )
-        
-        with open(filename, 'wb') as file_pi:
-            pickle.dump(model.history, file_pi)
-        print('saved the history for you in pickle format')
 
-    if weight == False :
-        with open(filename, 'wb') as file_pi:
-            pickle.dump(model.history, file_pi)
-        print('saved the history for you in pickle format')
+
