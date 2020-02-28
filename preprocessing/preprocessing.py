@@ -16,9 +16,9 @@ def greyscale_to_rgb(df,h=137, w =236):# prepare X ## Need to replace df_i by tr
 def one_hot_y (y):
   # expect y to have 3 cols : gr, vd, cd
   # gr = y[:,0]
-  y_gr = pd.get_dummies(train_df['grapheme_root']).values
-  y_cd = pd.get_dummies(train_df['consonant_diacritic']).values
-  y_vd = pd.get_dummies(train_df['vowel_diacritic']).values
+  y_gr = pd.get_dummies(y['grapheme_root']).values
+  y_cd = pd.get_dummies(y['consonant_diacritic']).values
+  y_vd = pd.get_dummies(y['vowel_diacritic']).values
   return y_gr, y_vd, y_cd
 
 def split_train_test(x, y_gr, y_vd, y_cd, split = 0.8): #split should be greater than 0.7
