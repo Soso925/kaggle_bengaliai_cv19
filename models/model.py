@@ -1,10 +1,8 @@
 import tensorflow as tf
-from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.utils import plot_model
+import pickle
 
-
-
-def model_toto (summary = False, plot_summary = False) :
+def model_toto(summary = False, plot_summary = False) :
     inception = tf.keras.applications.inception_v3.InceptionV3(include_top=False, weights='imagenet', input_tensor=None,
                                                             input_shape=(137, 236, 3), pooling='max', classes=512)
     for layer in inception.layers:
@@ -38,7 +36,7 @@ def model_toto (summary = False, plot_summary = False) :
         plot_model(model, to_file='model.png')
     return model
 
-def model_toto2 (summary = False, plot_summary = False) :
+def model_toto2(summary = False, plot_summary = False) :
     inception = tf.keras.applications.inception_v3.InceptionV3(include_top=False, weights='imagenet', input_tensor=None,
                                                             input_shape=(137, 236, 3), pooling='max', classes=512)
     for layer in inception.layers:
@@ -72,7 +70,7 @@ def model_toto2 (summary = False, plot_summary = False) :
         plot_model(model, to_file='model.png')
     return model
 
-def model_toto3 (summary = False, plot_summary = False) :
+def model_toto3(summary = False, plot_summary = False) :
     inception = tf.keras.applications.inception_v3.InceptionV3(include_top=False, weights=None, input_tensor=None,
                                                             input_shape=(137, 236, 3), pooling='max', classes=512)
 
@@ -104,3 +102,14 @@ def model_toto3 (summary = False, plot_summary = False) :
         plot_model(model, to_file='model.png')
     return model
 
+def model_save(model, filename, weight = False):
+    #history is always true
+
+    if weight == True :
+        model.save( filename + ".h5")
+        print('saved the model for you in .h5 format' )
+
+    if weight == False :
+        with open(filename, 'wb') as file_pi:
+            pickle.dump(model.history, file_pi)
+        print('saved the history for you in pickle format')
