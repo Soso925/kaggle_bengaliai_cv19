@@ -14,12 +14,13 @@ from tqdm.auto import tqdm
 
 # custom ones
 from utils import load, plot_result #@todo : add other paquet once the training is over
-from preprocessing.preprocessing import greyscale_to_rgb, one_hot_y, split_train_test
+from preprocessing.preprocessing import greyscale_to_rgb, one_hot_y, split_train_test, resize, normalize_img
 from models.model import model_toto, model_toto2, model_toto3, model_v4, history_save
 
 if __name__ == '__main__':
     #load data
-    DATA_FOLDER = '/Users/tianqi/PycharmProjects/kaggle_bengaliai_cv19/kaggle/bengaliai-cv19/' #@todo : A remplir
+    #DATA_FOLDER = '/Users/tianqi/PycharmProjects/kaggle_bengaliai_cv19/kaggle/bengaliai-cv19/'  # @todo : A remplir
+    DATA_FOLDER = '/Users/Alain/GitHub/kaggle_bengaliai_cv19/data/' #@todo : A remplir
     train_df, test_df, class_map_df, sample_submission_df, train_img_df = load(DATA_FOLDER)
     #preprocess
     train_img_df = train_img_df[:1000].drop(['image_id'], axis=1) #@todo : to modify when training when whold dataset
