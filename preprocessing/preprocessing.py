@@ -33,7 +33,7 @@ def split_train_test(x, y_gr, y_vd, y_cd, split = 0.8): #split should be greater
   y_cd_training, y_cd_test = y_cd[training_idx], y_cd[test_idx]
   return x_training, x_test,   y_gr_training, y_gr_test ,   y_vd_training, y_vd_test,   y_cd_training, y_cd_test
 
-def normalize_img(df,h,w):# prepare X
+def normalize_img(df, h, w):# prepare X
     img_df = df.to_numpy()
     x = img_df/255.0
     x = x.reshape(-1, h, w, 1)
