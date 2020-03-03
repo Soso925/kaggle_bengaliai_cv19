@@ -36,8 +36,10 @@ def load(DATA_FOLDER, paquets = None):
             img.append(df.drop('image_id', axis=1).values.astype(np.uint8))
         img_id = np.concatenate(img_id)
         img = np.concatenate(img)
-    else : # local mode, take paquet 0 , take 10 most frequent grapheme root
+    else : # local mode, take paquet 0
         df = pd.read_parquet(os.path.join(DATA_FOLDER,'train_image_data_0.parquet'), engine='pyarrow')
+        if 1: #take 10 most frequent grapheme root
+            df=df.loc[df['grapheme_root'] in [72,64,13,107,23,96,113,147,133,115]]
         img_id = df['image_id'].values
         img = df.drop('image_id', axis=1).values.astype(np.uint8)
 
