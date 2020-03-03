@@ -20,16 +20,7 @@ def load(DATA_FOLDER, paquets = None):
     class_map_df = pd.read_csv(os.path.join(DATA_FOLDER, 'class_map.csv'))
     sample_submission_df = pd.read_csv(os.path.join(DATA_FOLDER, 'sample_submission.csv'))
 
-    # Load all train data image
-    df_list = []
-    for i in range(1): # For now just some small data
-        tmp_name = 'train_image_data_' + str(i) + '.parquet'
-        df_i =  pd.read_parquet(os.path.join(DATA_FOLDER,tmp_name))
-        print(f'shape of {i} parquet : {df_i.shape}')
-        df_list.append(df_i)
-
-    train_img_df = pd.concat(df_list)
-
+    #load paquets
     if paquets is not None:
         img_id = []
         img = []
@@ -42,7 +33,7 @@ def load(DATA_FOLDER, paquets = None):
     else : # local mode, take paquet 0
         df = pd.read_parquet(os.path.join(DATA_FOLDER,'train_image_data_0.parquet'), engine='pyarrow')
         if 1: #take 10 most frequent grapheme root
-            df=df.loc[df['grapheme_root'] in [72,64,13,107,23,96,113,147,133,115]]
+            df=df.loc[train_df['grapheme_root'].isin([72,64,13,107,23,96,113,147,133,115])]
         img_id = df['image_id'].values
         img = df.drop('image_id', axis=1).values.astype(np.uint8)
 
