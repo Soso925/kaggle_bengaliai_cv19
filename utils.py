@@ -10,7 +10,7 @@ def get_installed_packages():
                                       for i in installed_packages])
     print(installed_packages_list)
 
-def load(DATA_FOLDER):
+def load(DATA_FOLDER, paquets = None):
     DATA_FOLDER = DATA_FOLDER
     train_df = pd.read_csv(os.path.join(DATA_FOLDER, 'train.csv'))
     test_df = pd.read_csv(os.path.join(DATA_FOLDER, 'test.csv'))
@@ -27,8 +27,21 @@ def load(DATA_FOLDER):
 
     train_img_df = pd.concat(df_list)
 
+    if paquets is not None:
+        img_id = []
+        img = []
+        for i in paquets :
+            df = pd.read_parquet(DATA_FOLDER + '/%s'%i , engine='pyarrow')
+            img_id.append(df['image_id'].values)
+            img.append(df.drop('image_id', axis=1).values.astype(np.uint8))
+        img_id = np.concatenate(img_id)
+        img = np.concatenate(img)
+    else : # local mode, take paquet 0 , take 10 most frequent grapheme root
+        df = pd.read_parquet(os.path.join(DATA_FOLDER,'train_image_data_0.parquet'), engine='pyarrow')
+        img_id = df['image_id'].values
+        img = df.drop('image_id', axis=1).values.astype(np.uint8)
 
-    return train_df, test_df, class_map_df, sample_submission_df, train_img_df
+    return train_df, test_df, class_map_df, sample_submission_df, img_id, img
 
 
 def sub_plot_res(axes, x, y1, y2, l1='Training gr_accuracy', l2='Dev gr_accuracy', title='Accuracy for gr'):
