@@ -2,6 +2,7 @@
 import os
 import pandas as pd
 import pip
+from matplotlib import pyplot as plt
 
 def get_installed_packages():
     installed_packages = pip.get_installed_distributions()
