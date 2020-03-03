@@ -69,6 +69,13 @@ class preprocess_img(TransformerMixin):
         #normalize
         img_new = normalize_img(img_new, self.h, self.w)
 
+        print('** Transformation on image **')
+        print('size of image :', self.img.shape)
+        print('original image height and width : ', self.h, '   ', self.w)
+        print('Data augmentation : ', self.data_aug)
+        print('New size : ', self.resize['size'])
+        print('Normalize image')
+
         return img_new
 
 
