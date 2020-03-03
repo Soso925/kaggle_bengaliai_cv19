@@ -4,6 +4,9 @@ import pandas as pd
 import pip
 from matplotlib import pyplot as plt
 
+from preprocessing.preprocessing import *
+from preprocessing.data_aug import *
+
 def get_installed_packages():
     installed_packages = pip.get_installed_distributions()
     installed_packages_list = sorted(["%s==%s" % (i.key, i.version)
@@ -45,6 +48,9 @@ def load(DATA_FOLDER, paquets = None):
 
     return train_df, test_df, class_map_df, sample_submission_df, img_id, img
 
+def preprocess_img(train_df, img_id, img, pipline):
+    pass
+    return
 
 def sub_plot_res(axes, x, y1, y2, l1='Training gr_accuracy', l2='Dev gr_accuracy', title='Accuracy for gr'):
     axes.plot(x, y1, label=l1)
