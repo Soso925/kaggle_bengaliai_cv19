@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import cv2
 from tqdm.auto import tqdm
+from sklearn.base import TransformerMixin
 
 def greyscale_to_rgb(df,h=137, w =236):# prepare X
 
@@ -99,3 +100,36 @@ def resize(df, input_h, input_w, size=64,  need_progress_bar=True):
             resized[df[i]] = resized_roi.reshape(-1)
     #resized = pd.DataFrame(resized).T
     return resized.T
+
+class preprocess_img(TransformerMixin):
+    def __init__(self, img, h, w, dict_proc = {'data_aug' : None,'resize':{'size':64}}):
+        self.img = img
+        self.h = h
+        self.w = w
+        self.data_aug = dict_proc['data_aug']
+        self.resize = dict_proc['resize']
+
+    def fit(self, *_):
+        return self
+
+    def transform(self, *_):
+        img_new = self.img
+        if self.data_aug is not None :
+            pass #todo: waiting for validation of data_aug
+        if self.resize is not None :
+            s = self.resize['size']
+            h = self.h
+            w = self.w
+            img_new = resize(img, h, w, size=s)
+
+        #normalize
+        img_new = normalize_img(img_new, self.h, self.w)
+
+        print('** Transformation on image **')
+        print('size of image :', self.img.shape)
+        print('original image height and width : ', self.h, '   ', self.w)
+        print('Data augmentation : ', self.data_aug)
+        print('New size : ', self.resize['size'])
+        print('Normalize image')
+
+        return img_new

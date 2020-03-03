@@ -3,10 +3,7 @@ import os
 import pandas as pd
 import pip
 from matplotlib import pyplot as plt
-from sklearn.base import TransformerMixin
 
-from preprocessing.preprocessing import *
-from preprocessing.data_aug import *
 
 def get_installed_packages():
     installed_packages = pip.get_installed_distributions()
@@ -40,43 +37,6 @@ def load(DATA_FOLDER, paquets = None):
         img = df.drop('image_id', axis=1).values.astype(np.uint8)
 
     return train_df, test_df, class_map_df, sample_submission_df, img_id, img
-
-def preprocess_img(train_df, img_id, img, pipline):
-    pass
-    return
-
-class preprocess_img(TransformerMixin):
-    def __init__(self, img, h, w, dict_proc = {'data_aug' : None,'resize':{'size':64}}):
-        self.img = img
-        self.h = h
-        self.w = w
-        self.data_aug = dict_proc['data_aug']
-        self.resize = dict_proc['resize']
-
-    def fit(self, *_):
-        return self
-
-    def transform(self, *_):
-        img_new = self.img
-        if self.data_aug is not None :
-            pass #todo: waiting for validation of data_aug
-        if self.resize is not None :
-            s = self.resize['size']
-            h = self.h
-            w = self.w
-            img_new = resize(img, h, w, size=s)
-
-        #normalize
-        img_new = normalize_img(img_new, self.h, self.w)
-
-        print('** Transformation on image **')
-        print('size of image :', self.img.shape)
-        print('original image height and width : ', self.h, '   ', self.w)
-        print('Data augmentation : ', self.data_aug)
-        print('New size : ', self.resize['size'])
-        print('Normalize image')
-
-        return img_new
 
 
 def sub_plot_res(axes, x, y1, y2, l1='Training gr_accuracy', l2='Dev gr_accuracy', title='Accuracy for gr'):
