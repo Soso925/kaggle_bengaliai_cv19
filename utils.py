@@ -34,6 +34,7 @@ def load(DATA_FOLDER, paquets = None):
         df = pd.read_parquet(os.path.join(DATA_FOLDER,'train_image_data_0.parquet'), engine='pyarrow')
         if 1: #take 10 most frequent grapheme root
             df=df.loc[train_df['grapheme_root'].isin([72,64,13,107,23,96,113,147,133,115])]
+            train_df = train_df.loc[train_df['grapheme_root'].isin([72,64,13,107,23,96,113,147,133,115])]
         img_id = df['image_id'].values
         img = df.drop('image_id', axis=1).values.astype(np.uint8)
 
