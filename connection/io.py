@@ -1,5 +1,6 @@
 import os
 import zipfile
+import pandas as pd
 
 def make_dir_if_not_exists(path):
     directory = os.path.dirname(path)
@@ -16,7 +17,7 @@ def unzipfiles(list_inputs, directory, remove = True):
             zip_ref = zipfile.ZipFile(local_zip, 'r')
             zip_ref.extractall(directory)
             zip_ref.close()
-        if remove = True :
+        if remove == True:
             os.remove(local_zip)
 
 
