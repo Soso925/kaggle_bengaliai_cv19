@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 import cv2
 from tqdm.auto import tqdm
-from sklearn.base import TransformerMixin
 
 def greyscale_to_rgb(df,h=137, w =236):# prepare X
 
@@ -34,16 +33,10 @@ def split_train_test(x, y_gr, y_vd, y_cd, split = 0.8): #split should be greater
   y_cd_training, y_cd_test = y_cd[training_idx], y_cd[test_idx]
   return x_training, x_test,   y_gr_training, y_gr_test ,   y_vd_training, y_vd_test,   y_cd_training, y_cd_test
 
-def normalize_img(df, h, w):# prepare X
-    x = df/255.0
-    x = x.reshape(-1, h, w, 1)
-    print(x.shape)
-    return x
-
 # resize
 # courtesy of kaggle notebooks
 def resize(df, input_h, input_w, size=64,  need_progress_bar=True):
-    resized = {}
+    resized = []
     resize_size=size
     if need_progress_bar:
         for i in tqdm(range(df.shape[0])):
@@ -70,7 +63,7 @@ def resize(df, input_h, input_w, size=64,  need_progress_bar=True):
 
             roi = image[ymin:ymax,xmin:xmax]
             resized_roi = cv2.resize(roi, (resize_size, resize_size),interpolation=cv2.INTER_AREA)
-            resized[df.index[i]] = resized_roi.reshape(-1)
+            resized.append(resized_roi.reshape(-1))
     else:
         for i in range(df.shape[0]):
             #image = cv2.resize(df.loc[df.index[i]].values.reshape(137,236),(size,size),None,fx=0.5,fy=0.5,interpolation=cv2.INTER_AREA)
@@ -97,39 +90,6 @@ def resize(df, input_h, input_w, size=64,  need_progress_bar=True):
 
             roi = image[ymin:ymax,xmin:xmax]
             resized_roi = cv2.resize(roi, (resize_size, resize_size),interpolation=cv2.INTER_AREA)
-            resized[df[i]] = resized_roi.reshape(-1)
+            resized.append(resized_roi.reshape(-1))
     #resized = pd.DataFrame(resized).T
-    return resized.T
-
-class preprocess_img(TransformerMixin):
-    def __init__(self, img, h, w, dict_proc = {'data_aug' : None,'resize':{'size':64}}):
-        self.img = img
-        self.h = h
-        self.w = w
-        self.data_aug = dict_proc['data_aug']
-        self.resize = dict_proc['resize']
-
-    def fit(self, *_):
-        return self
-
-    def transform(self, *_):
-        img_new = self.img
-        if self.data_aug is not None :
-            pass #todo: waiting for validation of data_aug
-        if self.resize is not None :
-            s = self.resize['size']
-            h = self.h
-            w = self.w
-            img_new = resize(img, h, w, size=s)
-
-        #normalize
-        img_new = normalize_img(img_new, self.h, self.w)
-
-        print('** Transformation on image **')
-        print('size of image :', self.img.shape)
-        print('original image height and width : ', self.h, '   ', self.w)
-        print('Data augmentation : ', self.data_aug)
-        print('New size : ', self.resize['size'])
-        print('Normalize image')
-
-        return img_new
+    return np.array(resized).reshape(-1,resize_size,resize_size)
