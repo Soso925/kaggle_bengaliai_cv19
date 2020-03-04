@@ -38,6 +38,35 @@ def load(DATA_FOLDER, paquets = None):
 
     return train_df, test_df, class_map_df, sample_submission_df, img_id, img
 
+def preprocess_img(img, h, w, data_aug = None, new_size = 64):
+    s = new_size
+    tmp_h = h
+    tmp_w = w
+
+    img_new = img.copy()
+
+    if data_aug is not None :
+        pass #todo: waiting for validation of data_aug
+    if resize is not None :
+        tmp_h = h
+        tmp_w = w
+        img_new = resize(img_new, tmp_h, tmp_w, size=s)
+        tmp_h = s
+        tmp_w = s
+
+    # normalize
+    img_new = img_new / 255.0
+    # reshape
+    img_new = img_new.reshape(-1, tmp_h, tmp_w, 1)
+
+    print('** Transformation on image **')
+    print('size of image :', img.shape)
+    print('original image height and width : ', h, ', ', w)
+    print('Data augmentation : ', data_aug)
+    print('New size : ', new_size )
+    print('Normalize image')
+
+    return img_new
 
 def sub_plot_res(axes, x, y1, y2, l1='Training gr_accuracy', l2='Dev gr_accuracy', title='Accuracy for gr'):
     axes.plot(x, y1, label=l1)
