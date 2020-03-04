@@ -26,8 +26,8 @@ def load(DATA_FOLDER, paquets = None):
             df = pd.read_parquet(DATA_FOLDER + '/%s'%i , engine='pyarrow')
             img_id.append(df['image_id'].values)
             img.append(df.drop('image_id', axis=1).values.astype(np.uint8))
-        img_id = np.concatenate(img_id)
-        img = np.concatenate(img)
+        img_id = np.array(img_id)
+        img = np.array(img)
     else : # local mode, take paquet 0
         df = pd.read_parquet(os.path.join(DATA_FOLDER,'train_image_data_0.parquet'), engine='pyarrow')
         if 1: #take 10 most frequent grapheme root
