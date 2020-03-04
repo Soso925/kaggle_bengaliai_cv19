@@ -43,7 +43,7 @@ if __name__ == '__main__':
                      validation_data=(x_test, [y_gr_test, y_vd_test, y_cd_test]))
 
     plot_result(history)
-    history_save(history)
+    history_save(history, filename= 'toto')
 
 
 
