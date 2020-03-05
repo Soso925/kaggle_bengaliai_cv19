@@ -3,7 +3,8 @@ import os
 import pandas as pd
 import pip
 from matplotlib import pyplot as plt
-
+import numpy as np
+from preprocessing.preprocessing import resize
 
 def get_installed_packages():
     installed_packages = pip.get_installed_distributions()
@@ -12,6 +13,7 @@ def get_installed_packages():
     print(installed_packages_list)
 
 def load(DATA_FOLDER, paquets = None):
+    global RUN_LOCAL
     DATA_FOLDER = DATA_FOLDER
     train_df = pd.read_csv(os.path.join(DATA_FOLDER, 'train.csv'))
     test_df = pd.read_csv(os.path.join(DATA_FOLDER, 'test.csv'))
@@ -30,7 +32,7 @@ def load(DATA_FOLDER, paquets = None):
         img = np.array(img)
     else : # local mode, take paquet 0
         df = pd.read_parquet(os.path.join(DATA_FOLDER,'train_image_data_0.parquet'), engine='pyarrow')
-        if 1: #take 10 most frequent grapheme root
+        if RUN_LOCAL == 1: #take 10 most frequent grapheme root
             df=df.loc[train_df['grapheme_root'].isin([72,64,13,107,23,96,113,147,133,115])]
             train_df = train_df.loc[train_df['grapheme_root'].isin([72,64,13,107,23,96,113,147,133,115])]
         img_id = df['image_id'].values
@@ -39,6 +41,7 @@ def load(DATA_FOLDER, paquets = None):
     return train_df, test_df, class_map_df, sample_submission_df, img_id, img
 
 def preprocess_img(img, h, w, data_aug = None, new_size = 64):
+
     s = new_size
     tmp_h = h
     tmp_w = w
@@ -47,7 +50,7 @@ def preprocess_img(img, h, w, data_aug = None, new_size = 64):
 
     if data_aug is not None :
         pass #todo: waiting for validation of data_aug
-    if resize is not None :
+    if new_size is not None :
         tmp_h = h
         tmp_w = w
         img_new = resize(img_new, tmp_h, tmp_w, size=s)
