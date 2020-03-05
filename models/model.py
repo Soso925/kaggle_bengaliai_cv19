@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow.keras.utils import plot_model
 import pickle
 import json
+from include import RUN_LOCAL
 
 def model_save(model, filename, weight = False):
     #model is generally huge. Save the model wisely
@@ -123,6 +124,7 @@ def model_toto3(summary = False, plot_summary = False) :
 
 
 def model_v4(input_h, input_w, summary=False, plot_summary=False):
+    global RUN_LOCAL
     inputs = tf.keras.Input(shape=(input_h, input_w, 1))
     model = tf.keras.layers.Conv2D(filters=32, kernel_size=(3, 3), padding='SAME', activation='relu',
                                    input_shape=(input_h, input_w, 1))(inputs)
@@ -169,7 +171,10 @@ def model_v4(input_h, input_w, summary=False, plot_summary=False):
     x = tf.keras.layers.Dense(512, activation="relu")(model)
 
     # Add a final sigmoid layer for classification
-    head_gr = tf.keras.layers.Dense(168, activation='softmax', name='hgr')(x)
+    if RUN_LOCAL !=1 :
+        head_gr = tf.keras.layers.Dense(168, activation='softmax', name='hgr')(x)
+    else :
+        head_gr = tf.keras.layers.Dense(10, activation='softmax', name='hgr')(x)
     head_vd = tf.keras.layers.Dense(11, activation='softmax', name='hvd')(x)
     head_cd = tf.keras.layers.Dense(7, activation='softmax', name='hcd')(x)
 
