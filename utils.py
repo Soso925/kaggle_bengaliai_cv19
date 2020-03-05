@@ -5,6 +5,7 @@ import pip
 from matplotlib import pyplot as plt
 import numpy as np
 from preprocessing.preprocessing import resize
+from include import RUN_LOCAL
 
 def get_installed_packages():
     installed_packages = pip.get_installed_distributions()
@@ -79,24 +80,44 @@ def sub_plot_res(axes, x, y1, y2, l1='Training gr_accuracy', l2='Dev gr_accuracy
 
 
 def plot_result(history):
-    # train result
-    acc_gr = history.history['hgr_acc']
-    acc_vd = history.history['hvd_acc']
-    acc_cd = history.history['hcd_acc']
-    # validation/dev result
-    val_acc_gr = history.history['val_hgr_acc']
-    val_acc_vd = history.history['val_hvd_acc']
-    val_acc_cd = history.history['val_hcd_acc']
+    try :
+        # train result
+        acc_gr = history.history['hgr_acc']
+        acc_vd = history.history['hvd_acc']
+        acc_cd = history.history['hcd_acc']
+        # validation/dev result
+        val_acc_gr = history.history['val_hgr_acc']
+        val_acc_vd = history.history['val_hvd_acc']
+        val_acc_cd = history.history['val_hcd_acc']
 
-    # train loss
-    loss_gr = history.history['hgr_loss']
-    loss_vd = history.history['hvd_loss']
-    loss_cd = history.history['hcd_loss']
+        # train loss
+        loss_gr = history.history['hgr_loss']
+        loss_vd = history.history['hvd_loss']
+        loss_cd = history.history['hcd_loss']
 
-    # val loss
-    val_loss_gr = history.history['val_hgr_loss']
-    val_loss_vd = history.history['val_hvd_loss']
-    val_loss_cd = history.history['val_hcd_loss']
+        # val loss
+        val_loss_gr = history.history['val_hgr_loss']
+        val_loss_vd = history.history['val_hvd_loss']
+        val_loss_cd = history.history['val_hcd_loss']
+    except KeyError:
+        # train result
+        acc_gr = history.history['hgr_accuracy']
+        acc_vd = history.history['hvd_accuracy']
+        acc_cd = history.history['hcd_accuracy']
+        # validation/dev result
+        val_acc_gr = history.history['val_hgr_accuracy']
+        val_acc_vd = history.history['val_hvd_accuracy']
+        val_acc_cd = history.history['val_hcd_accuracy']
+
+        # train loss
+        loss_gr = history.history['hgr_loss']
+        loss_vd = history.history['hvd_loss']
+        loss_cd = history.history['hcd_loss']
+
+        # val loss
+        val_loss_gr = history.history['val_hgr_loss']
+        val_loss_vd = history.history['val_hvd_loss']
+        val_loss_cd = history.history['val_hcd_loss']
 
     epochs = range(len(acc_gr))
 

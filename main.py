@@ -16,13 +16,13 @@ from tqdm.auto import tqdm
 from utils import load, preprocess_img, plot_result  # @todo : add other paquet once the training is over
 from preprocessing.preprocessing import one_hot_y, split_train_test
 from models.model import history_save  # model_v4,
+from include import RUN_LOCAL
 
 if __name__ == '__main__':
-    global RUN_LOCAL # Add var RUN_LOCAL
-
-    RUN_LOCAL = True
+    #global RUN_LOCAL  # Add var RUN_LOCAL
+    #RUN_LOCAL = True
     # load data
-    DATA_FOLDER = '/content/drive/My Drive/kaggle/input/bengaliai-cv19'  # @todo : A remplir
+    DATA_FOLDER = '/Users/tianqi/PycharmProjects/kaggle_bengaliai_cv19/data/bengaliai-cv19'  # @todo : A remplir
     train_df, test_df, class_map_df, sample_submission_df, img_id, img = load(DATA_FOLDER)
     # preprocess
     train_x_img = preprocess_img(img, h=137, w=236, data_aug=None, new_size=64)
@@ -36,9 +36,8 @@ if __name__ == '__main__':
 
     if RUN_LOCAL == 1: # make a custom model
         import tensorflow as tf
-         # fix plot_model #@todo : add it in model.py
-         from tensorflow.keras.utils import plot_model
-
+        # fix plot_model #@todo : add it in model.py
+        from tensorflow.keras.utils import plot_model
 
         def model_v4(input_h, input_w, summary=False, plot_summary=False):
             inputs = tf.keras.Input(shape=(input_h, input_w, 1))
@@ -104,12 +103,9 @@ if __name__ == '__main__':
             return model
 
 
+
     vv = model_v4(input_h=64, input_w=64, plot_summary=True)
-<<<<<<< HEAD
-    history = vv.fit(x_training, [y_gr_training, y_vd_training, y_cd_training], epochs=3, batch_size=50, \
-=======
-    history = vv.fit(x_training, [y_gr_training, y_vd_training, y_cd_training], epochs=10, batch_size=100, \
->>>>>>> add a global var for RUN_LOCAL, refacto main
+    history = vv.fit(x_training, [y_gr_training, y_vd_training, y_cd_training], epochs=3, batch_size=500, \
                      validation_data=(x_test, [y_gr_test, y_vd_test, y_cd_test]))
 
     plot_result(history)
