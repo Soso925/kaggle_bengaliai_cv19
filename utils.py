@@ -1,17 +1,11 @@
 #load data
 import os
 import pandas as pd
-import pip
 from matplotlib import pyplot as plt
 import numpy as np
 from preprocessing.preprocessing import resize
 from include import RUN_LOCAL
 
-def get_installed_packages():
-    installed_packages = pip.get_installed_distributions()
-    installed_packages_list = sorted(["%s==%s" % (i.key, i.version)
-                                      for i in installed_packages])
-    print(installed_packages_list)
 
 def load(DATA_FOLDER, paquets = None):
     global RUN_LOCAL
