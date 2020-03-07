@@ -39,7 +39,7 @@ if __name__ == '__main__':
     #toto = model_toto3()
     #history = toto.fit(x_training, [y_gr_training, y_vd_training, y_cd_training], epochs=20, batch_size=50,  validation_data=(x_test, [y_gr_test, y_vd_test, y_cd_test]))
     vv = model_v4(input_h=64, input_w=64, plot_summary=True)
-    history = vv.fit(x_training, [y_gr_training, y_vd_training, y_cd_training], epochs=100, batch_size=50, \
+    history = vv.fit(x_training, [y_gr_training, y_vd_training, y_cd_training], epochs=3, batch_size=50, \
                      validation_data=(x_test, [y_gr_test, y_vd_test, y_cd_test]))
 
     plot_result(history)
