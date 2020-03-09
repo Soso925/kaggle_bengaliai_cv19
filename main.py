@@ -2,7 +2,6 @@
 from utils import load, preprocess_img, plot_result  # @todo : add other paquet once the training is over
 from preprocessing.preprocessing import one_hot_y, split_train_test
 from models.model import history_save, model_v4
-from include import RUN_LOCAL
 
 if __name__ == '__main__':
 
