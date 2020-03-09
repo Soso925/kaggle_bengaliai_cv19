@@ -4,11 +4,9 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import numpy as np
 from preprocessing.preprocessing import resize
-from include import RUN_LOCAL
 
 
 def load(DATA_FOLDER, paquets = None):
-    global RUN_LOCAL
     DATA_FOLDER = DATA_FOLDER
     train_df = pd.read_csv(os.path.join(DATA_FOLDER, 'train.csv'))
     test_df = pd.read_csv(os.path.join(DATA_FOLDER, 'test.csv'))
@@ -27,9 +25,6 @@ def load(DATA_FOLDER, paquets = None):
         img = np.array(img)
     else : # local mode, take paquet 0
         df = pd.read_parquet(os.path.join(DATA_FOLDER,'train_image_data_0.parquet'), engine='pyarrow')
-        if RUN_LOCAL == 1: #take 10 most frequent grapheme root
-            df=df.loc[train_df['grapheme_root'].isin([72,64,13,107,23,96,113,147,133,115])]
-            train_df = train_df.loc[train_df['grapheme_root'].isin([72,64,13,107,23,96,113,147,133,115])]
         img_id = df['image_id'].values
         img = df.drop('image_id', axis=1).values.astype(np.uint8)
 
