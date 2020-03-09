@@ -16,11 +16,9 @@ if __name__ == '__main__':
     x_training, x_test, y_gr_training, y_gr_test, \
     y_vd_training, y_vd_test, y_cd_training, y_cd_test \
         = split_train_test(train_x_img, y_gr, y_vd, y_cd, split=0.8)
-    # train
 
+    # train
     vv = model_v4(input_h=64, input_w=64, plot_summary=False)
-    # Get smaller dataset for training
-    x_training, y_gr_training, y_vd_training, y_cd_training  = x_training[:100], y_gr_training[:100], y_vd_training[:100], y_cd_training[:100]
     history = vv.fit(x_training, [y_gr_training, y_vd_training, y_cd_training], epochs=3, batch_size=50, \
                      validation_data=(x_test, [y_gr_test, y_vd_test, y_cd_test]))
 
