@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 
+
 def random_scale_rotate_shift(image, mode={'rotate': 10, 'scale': 0.1, 'shift': 0.1}):
     dangle = 0
     dscale_x, dscale_y = 0, 0

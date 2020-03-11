@@ -30,7 +30,9 @@ def load(DATA_FOLDER, paquets = None):
 
     return train_df, test_df, class_map_df, sample_submission_df, img_id, img
 
-def preprocess_img(img, h, w, data_aug = None, new_size = 64):
+def data_aug():
+    pass
+def preprocess_img(img, h, w, new_size = 64):
 
     s = new_size
     tmp_h = h
@@ -38,8 +40,6 @@ def preprocess_img(img, h, w, data_aug = None, new_size = 64):
 
     img_new = img.copy()
 
-    if data_aug is not None :
-        pass #todo: waiting for validation of data_aug
     if new_size is not None :
         tmp_h = h
         tmp_w = w

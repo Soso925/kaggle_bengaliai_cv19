@@ -9,7 +9,7 @@ if __name__ == '__main__':
     DATA_FOLDER = '/Users/tianqi/PycharmProjects/kaggle_bengaliai_cv19/data/bengaliai-cv19'  # @todo : A remplir
     train_df, test_df, class_map_df, sample_submission_df, img_id, img = load(DATA_FOLDER)
     # preprocess
-    train_x_img = preprocess_img(img, h=137, w=236, data_aug=None, new_size=64)
+    train_x_img = preprocess_img(img, h=137, w=236, new_size=64)
     # get y
     y_gr, y_vd, y_cd = one_hot_y(y=train_df)
     # split
