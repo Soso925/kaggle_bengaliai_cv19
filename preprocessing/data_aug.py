@@ -1,6 +1,21 @@
 import numpy as np
 import cv2
 
+def mix_up(images, oh_labels, alpha = 0.4):
+    gamma = np.random.beta(alpha, alpha)
+    gamma = max(1-gamma, gamma)
+
+    batch_size = len(images)
+
+    # mix-up
+    perm = np.random.permutation(batch_size)
+    perm_img = images[perm]
+
+    perm_oh_labels = oh_labels[perm]
+
+    mix_img = gamma * images + (1-gamma)*perm_img
+    mix_oh_labels = gamma * oh_labels + (1-gamma)*perm_oh_labels
+    return mix_img, mix_oh_labels
 
 def random_scale_rotate_shift(image, mode={'rotate': 10, 'scale': 0.1, 'shift': 0.1}):
     dangle = 0
