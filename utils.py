@@ -55,7 +55,6 @@ def preprocess_img(img, h, w, new_size = 64):
     print('** Transformation on image **')
     print('size of image :', img.shape)
     print('original image height and width : ', h, ', ', w)
-    print('Data augmentation : ', data_aug)
     print('New size : ', new_size )
     print('Normalize image')
 

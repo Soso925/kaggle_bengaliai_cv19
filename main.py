@@ -24,8 +24,3 @@ if __name__ == '__main__':
 
     plot_result(history)
     history_save(history, filename='toto')
-
-
-
-
-

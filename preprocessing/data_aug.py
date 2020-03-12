@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-def mix_up(images, oh_labels, alpha = 0.4):
+def mix_up(images, y_gr, y_vd, y_cd, alpha = 0.4):
     gamma = np.random.beta(alpha, alpha)
     gamma = max(1-gamma, gamma)
 
@@ -11,12 +11,17 @@ def mix_up(images, oh_labels, alpha = 0.4):
     perm = np.random.permutation(batch_size)
     perm_img = images[perm]
 
-    perm_oh_labels = oh_labels[perm]
+    perm_y_gr = y_gr[perm]
+    perm_y_vd = y_vd[perm]
+    perm_y_cd = y_cd[perm]
 
     mix_img = gamma * images + (1-gamma)*perm_img
-    mix_oh_labels = gamma * oh_labels + (1-gamma)*perm_oh_labels
-    print('mix-up done with alpha : ', alpha)
-    return mix_img, mix_oh_labels
+    mix_y_gr = gamma * y_gr + perm_y_gr * (1-gamma)
+    mix_y_vd = gamma * y_vd + perm_y_vd * (1-gamma)
+    mix_y_cd = gamma * y_cd + perm_y_cd * (1-gamma)
+
+    print('mix-up done with alpha : ', alpha, ' with : ', batch_size, 'images.')
+    return mix_img, mix_y_gr, mix_y_vd, mix_y_cd
 
 def random_scale_rotate_shift(image, mode={'rotate': 10, 'scale': 0.1, 'shift': 0.1}):
     dangle = 0
@@ -53,7 +58,6 @@ def random_scale_rotate_shift(image, mode={'rotate': 10, 'scale': 0.1, 'shift': 
     s = src.astype(np.float32)
     d = dst.astype(np.float32)
     transform = cv2.getPerspectiveTransform(s, d)
-    image = cv2.warpPerspective(image, transform, (width, height), flags=cv2.INTER_LINEAR,
-                                borderMode=cv2.BORDER_CONSTANT, borderValue=(1, 1, 1))
-
+    image = cv2.warpPerspective(image, transform, (width, height), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=(1, 1, 1))
+    print(f"random scale: {mode['scale']}, rotate :  {mode['rotate']}, shift : {mode['shift']} on {len(image)} images.")
     return image
