@@ -67,7 +67,7 @@ def mix_up(images, y_gr, y_vd, y_cd, alpha = 1):
     mix_y_vd = gamma * y_vd + perm_y_vd * (1-gamma)
     mix_y_cd = gamma * y_cd + perm_y_cd * (1-gamma)
 
-    print('mix-up done with alpha : ', alpha, ' with : ', batch_size, 'images.')
+    #print('mix-up done with alpha : ', alpha, ' with : ', batch_size, 'images.')
     return mix_img, mix_y_gr, mix_y_vd, mix_y_cd
 
 def random_scale_rotate_shift(image, mode={'rotate': 10, 'scale': 0.1, 'shift': 0.1}):
@@ -106,5 +106,5 @@ def random_scale_rotate_shift(image, mode={'rotate': 10, 'scale': 0.1, 'shift': 
     d = dst.astype(np.float32)
     transform = cv2.getPerspectiveTransform(s, d)
     image = cv2.warpPerspective(image, transform, (width, height), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=(1, 1, 1))
-    print(f"random scale: {mode['scale']}, rotate :  {mode['rotate']}, shift : {mode['shift']} on {len(image)} images.")
+    #print(f"random scale: {mode['scale']}, rotate :  {mode['rotate']}, shift : {mode['shift']} on {len(image)} images.")
     return image
