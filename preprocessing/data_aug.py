@@ -37,6 +37,7 @@ def data_generator(x_img, y_gr, y_vd, y_cd, batch_size = 128, mode_data_aug = Tr
                 res_y_gr.append(tmp_y_gr)
                 res_y_vd.append(tmp_y_vd)
                 res_y_cd.append(tmp_y_cd)
+
         res_y_gr = np.array(res_y_gr)
         res_y_vd = np.array(res_y_vd)
         res_y_cd = np.array(res_y_cd)
@@ -107,4 +108,6 @@ def random_scale_rotate_shift(image, mode={'rotate': 10, 'scale': 0.1, 'shift': 
     transform = cv2.getPerspectiveTransform(s, d)
     image = cv2.warpPerspective(image, transform, (width, height), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=(1, 1, 1))
     #print(f"random scale: {mode['scale']}, rotate :  {mode['rotate']}, shift : {mode['shift']} on {len(image)} images.")
+    if len(image.shape) == 2 :
+        image = image.reshape(height, width,1)
     return image
