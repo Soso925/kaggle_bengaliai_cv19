@@ -14,6 +14,7 @@ def data_generator(x_img, y_gr, y_vd, y_cd, batch_size = 128, mode_data_aug = Tr
         i_batch = np.random.choice(a=N, size=batch_size)
         tmp_x = x_img[i_batch]
         tmp_y_gr, tmp_y_vd, tmp_y_cd = y_gr[i_batch], y_vd[i_batch], y_cd[i_batch]
+
         if mode_data_aug == False:
                 res_x.append(tmp_x)
                 res_y_gr.append(tmp_y_gr)
@@ -21,6 +22,7 @@ def data_generator(x_img, y_gr, y_vd, y_cd, batch_size = 128, mode_data_aug = Tr
                 res_y_cd.append(tmp_y_cd)
 
         if mode_data_aug == True :
+
             if mixup_alpha != 0 :
                 mix_img, mix_y_gr, mix_y_vd, mix_y_cd = mix_up(tmp_x, tmp_y_gr, tmp_y_vd, tmp_y_cd, mixup_alpha)
                 res_x.append(mix_img)
@@ -28,7 +30,7 @@ def data_generator(x_img, y_gr, y_vd, y_cd, batch_size = 128, mode_data_aug = Tr
                 res_y_vd.append(mix_y_vd)
                 res_y_cd.append(mix_y_cd)
 
-            if srs_mode['rotate'] != 0 and srs_mode['scale'] != 0 and srs_mode['shift'] != 0 :
+            if (srs_mode['rotate'] == 0 and srs_mode['scale'] == 0 and srs_mode['shift'] == 0) == False :
                 tmp = []
                 for index in range(batch_size):
                     tmp.append(random_scale_rotate_shift(tmp_x[index], mode={'rotate': srs_mode['rotate'], 'scale': srs_mode['scale'], 'shift': srs_mode['shift']}))
