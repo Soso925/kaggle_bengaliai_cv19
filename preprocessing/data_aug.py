@@ -23,10 +23,10 @@ def data_generator(x_img, y_gr, y_vd, y_cd, batch_size = 128, mode_data_aug = Tr
         if mode_data_aug == True :
             if mixup_alpha != 0 :
                 mix_img, mix_y_gr, mix_y_vd, mix_y_cd = mix_up(tmp_x, tmp_y_gr, tmp_y_vd, tmp_y_cd, mixup_alpha)
-            res_x.append(mix_img)
-            res_y_gr.append(mix_y_gr)
-            res_y_vd.append(mix_y_vd)
-            res_y_cd.append(mix_y_cd)
+                res_x.append(mix_img)
+                res_y_gr.append(mix_y_gr)
+                res_y_vd.append(mix_y_vd)
+                res_y_cd.append(mix_y_cd)
 
             if srs_mode['rotate'] != 0 and srs_mode['scale'] != 0 and srs_mode['shift'] != 0 :
                 tmp = []
