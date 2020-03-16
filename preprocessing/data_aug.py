@@ -5,7 +5,7 @@ import numpy as np
 
 
 def data_generator(x_img, y_gr, y_vd, y_cd, batch_size=128, mode_data_aug=True, mixup_alpha=1, \
-                   srs_mode={'rotate': 5, 'scale': 0.1, 'shift': 0.1}, cutmix=True \
+                   srs_mode={'rotate': 5, 'scale': 0.1, 'shift': 0.1}, mode_cutmix=True \
                    ):
     while 1:
         res_x = []
@@ -33,12 +33,12 @@ def data_generator(x_img, y_gr, y_vd, y_cd, batch_size=128, mode_data_aug=True, 
                 res_y_vd.append(mix_y_vd)
                 res_y_cd.append(mix_y_cd)
 
-            if cutmix != 0:
-                res_img, res_y_gr, res_y_vd, res_y_cd = cutmix(tmp_x, tmp_y_gr, tmp_y_vd, tmp_y_cd)
-                res_x.append(res_img)
-                res_y_gr.append(res_y_gr)
-                res_y_vd.append(res_y_vd)
-                res_y_cd.append(res_y_cd)
+            if mode_cutmix != 0:
+                cut_img, cut_y_gr, cut_y_vd, cut_y_cd = cutmix(tmp_x, tmp_y_gr, tmp_y_vd, tmp_y_cd)
+                res_x.append(cut_img)
+                res_y_gr.append(cut_y_gr)
+                res_y_vd.append(cut_y_vd)
+                res_y_cd.append(cut_y_cd)
 
             if ((srs_mode['rotate'] != 0) or (srs_mode['scale'] != 0) or (srs_mode['shift'] != 0)):
                 tmp = []
@@ -83,7 +83,6 @@ def cutmix(images, y_gr, y_vd, y_cd):  # of a batch
     x2 = np.clip(r_x + r_w // 2, 0, w)
     y1 = np.clip(r_y - r_h // 2, 0, h)
     y2 = np.clip(r_y + r_h // 2, 0, h)
-    print('test:', x1, x2, y1, y2)
 
     res_img = images.copy()
     res_img[:, x1:x2, y1:y2, :] = perm_img[:, x1:x2, y1:y2, :]
