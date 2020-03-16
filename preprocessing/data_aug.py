@@ -2,7 +2,8 @@ import numpy as np
 import cv2
 
 import numpy as np
-def data_generator(x_img, y_gr, y_vd, y_cd, batch_size = 128, mode_data_aug = True, mixup_alpha = 1, srs_mode = {'rotate': 10, 'scale': 0.1, 'shift': 0.1}):
+
+def data_generator(x_img, y_gr, y_vd, y_cd, batch_size = 128, mode_data_aug = True, mixup_alpha = 1, srs_mode = {'rotate': 10, 'scale': 0.1, 'shift': 0.1}, cutmix= False):
 
     while 1 :
         res_x = []
@@ -30,6 +31,13 @@ def data_generator(x_img, y_gr, y_vd, y_cd, batch_size = 128, mode_data_aug = Tr
                 res_y_vd.append(mix_y_vd)
                 res_y_cd.append(mix_y_cd)
 
+            if cutmix != 0 :
+                res_img, res_y_gr, res_y_vd, res_y_cd = cutmix(tmp_x, tmp_y_gr, tmp_y_vd, tmp_y_cd)
+                res_x.append(res_img)
+                res_y_gr.append(res_y_gr)
+                res_y_vd.append(res_y_vd)
+                res_y_cd.append(res_y_cd)
+
             if ((srs_mode['rotate'] != 0) or (srs_mode['scale'] != 0) or (srs_mode['shift'] != 0)):
                 tmp = []
                 for index in range(batch_size):
@@ -50,6 +58,38 @@ def data_generator(x_img, y_gr, y_vd, y_cd, batch_size = 128, mode_data_aug = Tr
 
         yield(res_x, {'hgr': res_y_gr, 'hvd': res_y_vd,'hcd': res_y_cd})
 
+def cutmix(images, y_gr, y_vd, y_cd): # of a batch
+
+
+    batch_size, h, w, c = images.shape
+
+    # mix-up
+    perm = np.random.permutation(batch_size)
+    perm_img = images[perm]
+    perm_y_gr = y_gr[perm]
+    perm_y_vd = y_vd[perm]
+    perm_y_cd = y_cd[perm]
+
+    lbd = np.random.uniform(low = 0.0, high = 1.0, size = None)
+    r_x = np.random.randint(w)
+    r_y = np.random.randint(h)
+    r_w = np.int(np.sqrt(1-lbd)*w)
+    r_h = np.int(np.sqrt(1-lbd)*h)
+    x1 = np.clip(r_x - r_w//2, 0, w)
+    x2 = np.clip(r_x + r_w//2, 0, w)
+    y1 = np.clip(r_y - r_h//2, 0, h)
+    y2 = np.clip(r_y + r_h//2, 0, h)
+    print('test:', x1, x2, y1, y2)
+
+    res_img = images.copy()
+    res_img[:, x1:x2, y1:y2, :] = perm_img[:, x1:x2, y1:y2, :]
+    lbd = 1 - (x2-x1)*(y2-y1)/(w*h)
+
+    res_y_gr = lbd * y_gr + (1-lbd)* perm_y_gr
+    res_y_vd = lbd * y_vd + (1-lbd)* perm_y_vd
+    res_y_cd = lbd * y_cd + (1-lbd)* perm_y_cd
+
+    return res_img, res_y_gr, res_y_vd, res_y_cd
 
 def mix_up(images, y_gr, y_vd, y_cd, alpha = 1):
     gamma = np.random.beta(0.4, alpha) # by default, beta = 0.4 (according to original paper)
