@@ -3,7 +3,9 @@ import cv2
 
 import numpy as np
 
-def data_generator(x_img, y_gr, y_vd, y_cd, batch_size = 128, mode_data_aug = True, mixup_alpha = 1, srs_mode = {'rotate': 10, 'scale': 0.1, 'shift': 0.1}, cutmix= False):
+def data_generator(x_img, y_gr, y_vd, y_cd, batch_size = 128, mode_data_aug = True, mixup_alpha = 1, \
+                   srs_mode = {'rotate': 5, 'scale': 0.1, 'shift': 0.1}, cutmix= True \
+                   ):
 
     while 1 :
         res_x = []
